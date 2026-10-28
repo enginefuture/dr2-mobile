@@ -4,6 +4,12 @@
 
 DR2 Mobile is an independent continuation of [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d2r-mobile). The original project and its contributors provided the foundation; the original MIT license and documentation are retained below. Performance and device claims in the original documentation describe the upstream project and have not all been revalidated for this version.
 
+### iPhone Air demonstration
+
+[Watch the on-device quick restart and restored return portal](docs/media/iphone-restart-portal.mp4) · [中文使用说明与截图](README.zh-CN.md#新功能使用说明)
+
+![Portal restored and map guidance on iPhone Air](docs/media/iphone-portal-restored.png)
+
 ### Additions in this version
 
 - Map guidance for exits, waypoints and relevant destinations, with one target displayed at a time and L3 to cycle targets.
