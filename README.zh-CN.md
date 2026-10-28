@@ -25,6 +25,10 @@ DR2 Mobile 是基于 [jhaizhou-ops/d2r-mobile](https://github.com/jhaizhou-ops/d
 
 [观看 iPhone Air 录屏：一键重开并返回蓝门](docs/media/iphone-restart-portal.mp4)
 
+### 构建时的背包校验
+
+更新源码后运行 `./setup.sh`，再运行 `cd dm/ios && ./run.sh build`。构建会检查 NS 程序改写器指纹、背包图标及装备与镶孔保护门，并检查生成的物品原始尺寸表。旧产物或缺失数据会被拒绝，按提示重新运行 `./setup.sh` 或 `bash dm/tools/product.sh build`。自定义 `DM_OUT` 时也需重新生成对应目录。此检查用于防止构建产物不一致，不能代替真机验证；更新前请备份存档。
+
 ### 新功能使用说明
 
 - **地图目标**：在游戏中打开小地图，指引会显示当前区域可识别的出口、传送点等目标；使用手柄按下左摇杆（L3）切换，界面一次显示一个目标。部分区域或加载状态可能没有可用目标。

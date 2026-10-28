@@ -120,7 +120,8 @@ py_env() { python3 -m venv "$DM_ROOT/build/cache/dm/venv" && "$PY" -m pip instal
 [ -x "$PY" ] && "$PY" -c 'import PIL, numpy, lz4, capstone, unicorn' 2> /dev/null || step "Python 环境与包" py_env
 
 P=$(head -1 "$HERE/dm/PRODUCT")
-[ -f "$DM_ROOT/build/cache/dm/out/$P-touch/main.patched.bin" ] || step "改写主程序（三种产物）" env DM_PY="$PY" bash "$HERE/dm/tools/product.sh" build
+"$PY" "$HERE/dm/tools/check_inventory_build.py" "$DM_ROOT/build/cache/dm/out/$P-touch" >/dev/null 2>&1 || step "改写主程序（三种产物）" env DM_PY="$PY" bash "$HERE/dm/tools/product.sh" build
+"$PY" "$HERE/dm/tools/check_inventory_build.py" "$DM_ROOT/build/cache/dm/out/$P-touch" || die "背包补丁校验失败 / inventory patch verification failed"
 
 packs() {
   mkdir -p "$DM_ROOT/build/cache/dm/dmsh" && cd "$DM_ROOT/build/cache/dm/dmsh" || return 1

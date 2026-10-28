@@ -34,6 +34,8 @@ else
   unset MOVIE_PREFIX
 fi
 if [ "$1" = build ]; then
+  # The 84-cell overlay requires matching rewritten code and inventory gates.
+  python3 ../tools/check_inventory_build.py "$OUT" || { t "🔴 背包补丁产物不匹配；在仓库根目录运行 ./setup.sh，或运行 bash dm/tools/product.sh build；自定义 DM_OUT 请重新生成对应产物"; exit 1; }
   # 生成：宿主源文件/头路径/框架（取自 dm/host/Makefile）+ 映像三段内嵌汇编与 -segprot + 装载表头/门表进 App 资源 dm/
   # Generate: host source files/header paths/frameworks (taken from dm/host/Makefile) + embedded assembly for the three image segments and -segprot + load table header/gate table into the App resources dm/
   mkdir -p Gen; for x in Gen/* Gen/.[!.]*; do [ -e "$x" ] && [ "$x" != Gen/assets ] && rm -rf "$x"; done; mkdir -p Gen/dm   # 每次重建 Gen，但留着 Gen/assets：原版衍生资源有自己的输入指纹与锁（tools/gen_assets.py），删了会和并行读它的功能用例撞（accept 红） | Rebuild Gen every time but keep Gen/assets: assets derived from the original game have their own input fingerprint and lock (tools/gen_assets.py); deleting them would collide with functional cases reading them in parallel (accept fails)
@@ -85,6 +87,7 @@ if [ "$1" = build ]; then
   # host/romfs_validate.c): every overlay set must contain one, and packaging fails if any set lacks it
   for o in Gen/romfs_overlay Gen/romfs_overlay_variants/* Gen/romfs_overlay_astc Gen/romfs_overlay_astc_variants/*; do
     [ -d "$o/data" ] || continue; grep -q '^vfs-root = ' "$o/data/.build.config" 2>/dev/null || { t "🔴 覆盖层 $o 里没有可用的配置文件 data/.build.config"; exit 1; }
+    python3 ../tools/check_inventory_build.py --footprints "$o/inventory_footprints.tsv" || { t "🔴 覆盖层 $o 背包物品原始尺寸缺失或格式错误"; exit 1; }
   done
   [ -f Gen/romfs_overlay/data/.build.config ] || { t "🔴 没生成覆盖层 Gen/romfs_overlay"; exit 1; }
   # 免费的开发者账号（个人团队）签不了这几项权限：DM_FREE_ACCOUNT=1 时从工程描述里去掉再生成。去掉后少的是 iCloud 存档同步、
