@@ -1,0 +1,7 @@
+[package]
+name = "dr2-inventory-audit"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+d2s = "=0.1.1"
